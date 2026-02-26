@@ -12,7 +12,7 @@ async function callGroq(apiKey, prompt) {
       model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.8,
-      max_tokens: 4096,
+      max_tokens: 8192,
     }),
   });
 
