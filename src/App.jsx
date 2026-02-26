@@ -16,7 +16,7 @@ function getStepIndex(step) {
 
 export default function App() {
   const [step, setStep] = useState(() => {
-    return localStorage.getItem('gemini_api_key') ? 'theme' : 'apiKey';
+    return localStorage.getItem('groq_api_key') ? 'theme' : 'apiKey';
   });
   const [theme, setTheme] = useState('');
   const [titles, setTitles] = useState([]);
@@ -36,7 +36,7 @@ export default function App() {
     setLoading(true);
     setError('');
     try {
-      const result = await generateTitles(getKey('gemini_api_key'), inputTheme);
+      const result = await generateTitles(getKey('groq_api_key'), inputTheme);
       setTitles(result);
       setStep('title');
     } catch (err) {
@@ -51,7 +51,7 @@ export default function App() {
     setLoading(true);
     setError('');
     try {
-      const articleText = await generateArticle(getKey('gemini_api_key'), theme, title);
+      const articleText = await generateArticle(getKey('groq_api_key'), theme, title);
       setArticle(articleText);
       setStep('result');
 

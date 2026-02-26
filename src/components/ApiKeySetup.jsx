@@ -1,18 +1,18 @@
 import { useState } from 'react';
 
 export default function ApiKeySetup({ onComplete }) {
-  const [geminiKey, setGeminiKey] = useState(
-    () => localStorage.getItem('gemini_api_key') || ''
+  const [groqKey, setGroqKey] = useState(
+    () => localStorage.getItem('groq_api_key') || ''
   );
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!geminiKey.trim()) {
+    if (!groqKey.trim()) {
       setError('APIキーを入力してください');
       return;
     }
-    localStorage.setItem('gemini_api_key', geminiKey.trim());
+    localStorage.setItem('groq_api_key', groqKey.trim());
     onComplete();
   };
 
@@ -22,12 +22,12 @@ export default function ApiKeySetup({ onComplete }) {
         <span className="step-icon">🔑</span>
         <h2>APIキー設定</h2>
         <p className="step-description">
-          記事生成にはGoogle Gemini APIのキーが必要です（無料枠あり）。
+          記事生成にはGroq APIのキーが必要です（無料）。
           <br />
-          <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">
-            Google AI Studio
+          <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">
+            Groq Console
           </a>
-          からAPIキーを取得できます。
+          からAPIキーを取得できます（Googleアカウントでログイン可）。
           <br />
           キーはブラウザのローカルストレージにのみ保存され、外部に送信されません。
         </p>
@@ -35,13 +35,13 @@ export default function ApiKeySetup({ onComplete }) {
 
       <form onSubmit={handleSubmit} className="api-key-form">
         <div className="form-group">
-          <label htmlFor="gemini-key">Gemini API Key (Google)</label>
+          <label htmlFor="groq-key">Groq API Key</label>
           <input
-            id="gemini-key"
+            id="groq-key"
             type="password"
-            value={geminiKey}
-            onChange={(e) => setGeminiKey(e.target.value)}
-            placeholder="AIza..."
+            value={groqKey}
+            onChange={(e) => setGroqKey(e.target.value)}
+            placeholder="gsk_..."
             autoComplete="off"
           />
         </div>
