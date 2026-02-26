@@ -16,10 +16,7 @@ function getStepIndex(step) {
 
 export default function App() {
   const [step, setStep] = useState(() => {
-    const hasKeys =
-      localStorage.getItem('claude_api_key') &&
-      localStorage.getItem('openai_api_key');
-    return hasKeys ? 'theme' : 'apiKey';
+    return localStorage.getItem('claude_api_key') ? 'theme' : 'apiKey';
   });
   const [theme, setTheme] = useState('');
   const [titles, setTitles] = useState([]);
@@ -58,20 +55,19 @@ export default function App() {
       setArticle(articleText);
       setStep('result');
 
-      // Generate images in background
-      generateThumbnail(getKey('openai_api_key'), theme, title)
-        .then((url) => setThumbnail(url))
-        .catch((err) => console.error('Thumbnail error:', err));
+      // Generate images (Pollinations.ai - returns URLs instantly)
+      const thumbUrl = await generateThumbnail(theme, title);
+      setThumbnail(thumbUrl);
 
       const imageMatches = articleText.match(/\[IMAGE:\s*(.*?)\]/g) || [];
       const descriptions = imageMatches.map((m) => m.replace(/\[IMAGE:\s*/, '').replace(/\]$/, ''));
-      descriptions.forEach((desc, i) => {
-        generateArticleImage(getKey('openai_api_key'), desc)
-          .then((url) => {
-            setArticleImages((prev) => [...prev, { url, description: desc }]);
-          })
-          .catch((err) => console.error(`Article image ${i} error:`, err));
-      });
+      const images = await Promise.all(
+        descriptions.map(async (desc) => {
+          const url = await generateArticleImage(desc);
+          return { url, description: desc };
+        })
+      );
+      setArticleImages(images);
     } catch (err) {
       setError(`記事生成エラー: ${err.message}`);
       setLoading(false);
