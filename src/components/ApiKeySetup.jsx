@@ -1,18 +1,18 @@
 import { useState } from 'react';
 
 export default function ApiKeySetup({ onComplete }) {
-  const [claudeKey, setClaudeKey] = useState(
-    () => localStorage.getItem('claude_api_key') || ''
+  const [geminiKey, setGeminiKey] = useState(
+    () => localStorage.getItem('gemini_api_key') || ''
   );
   const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!claudeKey.trim()) {
+    if (!geminiKey.trim()) {
       setError('APIキーを入力してください');
       return;
     }
-    localStorage.setItem('claude_api_key', claudeKey.trim());
+    localStorage.setItem('gemini_api_key', geminiKey.trim());
     onComplete();
   };
 
@@ -22,21 +22,26 @@ export default function ApiKeySetup({ onComplete }) {
         <span className="step-icon">🔑</span>
         <h2>APIキー設定</h2>
         <p className="step-description">
-          記事生成にはClaude APIのキーが必要です。
+          記事生成にはGoogle Gemini APIのキーが必要です（無料枠あり）。
+          <br />
+          <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">
+            Google AI Studio
+          </a>
+          からAPIキーを取得できます。
+          <br />
           キーはブラウザのローカルストレージにのみ保存され、外部に送信されません。
-          画像生成は無料のPollinations.aiを使用するため、追加のキーは不要です。
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="api-key-form">
         <div className="form-group">
-          <label htmlFor="claude-key">Claude API Key (Anthropic)</label>
+          <label htmlFor="gemini-key">Gemini API Key (Google)</label>
           <input
-            id="claude-key"
+            id="gemini-key"
             type="password"
-            value={claudeKey}
-            onChange={(e) => setClaudeKey(e.target.value)}
-            placeholder="sk-ant-..."
+            value={geminiKey}
+            onChange={(e) => setGeminiKey(e.target.value)}
+            placeholder="AIza..."
             autoComplete="off"
           />
         </div>
